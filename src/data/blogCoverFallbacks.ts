@@ -15,7 +15,7 @@ const fallbacks: Record<string, { src: string; alt: string }> = {
   },
   "rediger-page-a-propos-inspire-confiance": {
     src: pageAPropos,
-    alt: "Boulanger souriant, bras croisés, sur le seuil de sa boulangerie aux façades vert sauge dans une rue calme",
+    alt: "Fleuriste aux cheveux gris, tablier en toile, composant un bouquet dans l'arrière-boutique encombrée de sa boutique, éclairée par une fenêtre",
   },
   "citer-sources-chiffres-etre-repris-par-ia": {
     src: citerSources,
