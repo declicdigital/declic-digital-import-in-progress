@@ -15,7 +15,7 @@ const fallbacks: Record<string, { src: string; alt: string }> = {
   },
   "rediger-page-a-propos-inspire-confiance": {
     src: pageAPropos,
-    alt: "Fleuriste aux cheveux gris, tablier en toile, composant un bouquet dans l'arrière-boutique encombrée de sa boutique, éclairée par une fenêtre",
+    alt: "Ébéniste d'une soixantaine d'années, cheveux blancs et barbe grise, assis dans son atelier pendant qu'une photographe réalise son portrait naturel, une vieille photo encadrée posée près de la fenêtre",
   },
   "citer-sources-chiffres-etre-repris-par-ia": {
     src: citerSources,
