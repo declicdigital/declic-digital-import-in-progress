@@ -38,7 +38,7 @@ async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
     throw new Error("Navigateur trop ancien pour lire les fichiers Word (mettez Chrome, Firefox ou Safari à jour).");
   }
   const stream = new ReadableStream<Uint8Array>({ start(c) { c.enqueue(data); c.close(); } })
-    .pipeThrough(new DecompressionStream("deflate-raw"));
+    .pipeThrough(new DecompressionStream("deflate-raw") as unknown as ReadableWritablePair<Uint8Array, Uint8Array>);
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 

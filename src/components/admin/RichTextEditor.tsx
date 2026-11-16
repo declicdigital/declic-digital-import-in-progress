@@ -55,7 +55,7 @@ export default function RichTextEditor({
     if (!editor) return;
     const current = editor.getHTML();
     if (value !== current) {
-      editor.commands.setContent(value || "", false);
+      editor.commands.setContent(value || "", { emitUpdate: false });
     }
   }, [value, editor]);
 
@@ -65,10 +65,10 @@ export default function RichTextEditor({
     const url = window.prompt("URL du lien :", prev || "https://");
     if (url === null) return;
     if (url === "") {
-      editor.chain().focus().extendMarkToNextChar().unsetLink().run();
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
-    editor.chain().focus().extendMarkToNextChar().setLink({ href: url }).run();
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }, [editor]);
 
   if (!editor) return null;

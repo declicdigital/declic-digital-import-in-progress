@@ -105,7 +105,7 @@ const FieldGroup = ({ children, cols = 1 }: { children: React.ReactNode; cols?: 
 
 // Helper email
 const row = (label: string, val: string | string[] | boolean | undefined): string => {
-  if (!val || (Array.isArray(val) && val.length === 0) || val === false) return "";
+  if (!val || (Array.isArray(val) && val.length === 0)) return "";
   const display = Array.isArray(val) ? val.join(", ") : val === true ? "Oui" : String(val);
   if (!display.trim()) return "";
   return `<tr><td style="padding:5px 12px 5px 0;color:#888;white-space:nowrap;vertical-align:top;font-size:13px;min-width:140px;">${label}</td><td style="padding:5px 0;font-size:13px;color:#222;line-height:1.5;">${display}</td></tr>`;
