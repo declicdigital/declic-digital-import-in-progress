@@ -33,7 +33,7 @@ const STATUS_LABELS: Record<string,{label:string;color:string}> = {
 };
 
 const Field = ({label,value}:{label:string;value:string|string[]|boolean|undefined|null}) => {
-  if(!value||(Array.isArray(value)&&value.length===0)||value===false) return null;
+  if(!value||(Array.isArray(value)&&value.length===0)) return null;
   const display = Array.isArray(value)?value.join(", "):value===true?"Oui":String(value);
   if(!display.trim()) return null;
   return (
