@@ -1,4 +1,5 @@
 import { useParams, Link, Navigate } from "react-router-dom";
+import { getBlogCover, getBlogCoverAlt, toAbsoluteUrl } from "@/data/blogCoverFallbacks";
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, ArrowLeft, Tag, Share2, Check } from "lucide-react";
@@ -149,7 +150,7 @@ export default function BlogArticle() {
         setLatestFromSupabase(data.map((a: any) => ({
           slug: a.slug,
           title: a.title,
-          image: a.cover_image_url ?? "",
+          image: getBlogCover(a.slug, a.cover_image_url) ?? "",
           category: a.category,
         })));
       }
@@ -171,7 +172,10 @@ export default function BlogArticle() {
         .filter((a) => a.slug !== post.slug && !relatedSlugs.has(a.slug))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice(0, 3)
-        .map((item) => ({ slug: item.slug, title: item.title, image: item.coverImageUrl || "", category: item.category }));
+        .map((item) => ({ slug: item.slug, title: item.title, image: getBlogCover(item.slug, item.coverImageUrl) ?? "", category: item.category }));
+
+  const coverSrc = getBlogCover(post.slug, post.cover_image_url);
+  const coverAbs = toAbsoluteUrl(coverSrc);
 
   return (
     <PageLayout>
@@ -188,14 +192,14 @@ export default function BlogArticle() {
         <meta property="og:title" content={post.meta_title || post.title} />
         <meta property="og:description" content={post.meta_description || post.excerpt} />
         <meta property="og:type" content="article" />
-        {post.cover_image_url && <meta property="og:image" content={post.cover_image_url} />}
+        {coverAbs && <meta property="og:image" content={coverAbs} />}
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           headline: post.title,
           description: post.meta_description || post.excerpt,
           datePublished: post.created_at,
-          image: post.cover_image_url,
+          image: coverAbs,
           author: { "@type": "Person", name: "Geoffrey", jobTitle: "Fondateur de Déclic Digital" },
           publisher: { "@type": "Organization", name: "Déclic Digital", url: "https://declicdigital.net" },
           mainEntityOfPage: `https://declicdigital.net/blog/${post.slug}`,
@@ -204,10 +208,10 @@ export default function BlogArticle() {
 
       {/* Cover image hero */}
       <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
-        {post.cover_image_url && (
+        {coverSrc && (
           <img
-            src={post.cover_image_url}
-            alt={post.title}
+            src={coverSrc}
+            alt={getBlogCoverAlt(post.slug, post.title, post.cover_image_url)}
             className="h-full w-full object-cover"
             loading="eager"
             fetchPriority="high"
@@ -245,7 +249,7 @@ export default function BlogArticle() {
       </article>
 
       <ArticleEndBlocks
-        related={related.map((r) => ({ slug: r.slug, title: r.title, image: r.coverImageUrl || "", category: r.category }))}
+        related={related.map((r) => ({ slug: r.slug, title: r.title, image: getBlogCover(r.slug, r.coverImageUrl) ?? "", category: r.category }))}
         latest={latest}
       />
     </PageLayout>

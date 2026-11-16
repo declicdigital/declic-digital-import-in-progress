@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getBlogCover, getBlogCoverAlt, toAbsoluteUrl } from "@/data/blogCoverFallbacks";
 import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -47,7 +48,7 @@ const Badge = ({ cat }: { cat: string }) => {
 const toArticles = (posts: typeof staticPosts): Article[] =>
   posts.map((p) => ({
     slug: p.slug, title: p.title, excerpt: p.excerpt,
-    coverImageUrl: p.coverImageUrl ?? null, category: p.category,
+    coverImageUrl: getBlogCover(p.slug, p.coverImageUrl), category: p.category,
     tags: p.tags, readTime: p.readTime, date: p.date,
   }));
 
@@ -86,7 +87,7 @@ export default function Blog() {
         const staticFiltered = toArticles(staticPosts.filter((p) => !supabaseSlugs.has(p.slug)));
         const remoteArticles: Article[] = data.map((a: any) => ({
           slug: a.slug, title: a.title, excerpt: a.excerpt,
-          coverImageUrl: a.cover_image_url ?? null, category: a.category,
+          coverImageUrl: getBlogCover(a.slug, a.cover_image_url), category: a.category,
           tags: a.tags ?? [], readTime: a.read_time, date: a.created_at,
         }));
         const all = [...remoteArticles, ...staticFiltered].sort(
@@ -180,7 +181,7 @@ export default function Blog() {
                 }}>
                 <div className="overflow-hidden relative" style={{ minHeight: "280px" }}>
                   {featured.coverImageUrl
-                    ? <img src={featured.coverImageUrl} alt={featured.title}
+                    ? <img src={featured.coverImageUrl} alt={getBlogCoverAlt(featured.slug, featured.title, featured.coverImageUrl)}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="eager" fetchPriority="high" width={800} height={500} />
                     : <div className="h-full w-full flex items-center justify-center" style={{ backgroundColor: "#E9F2F4" }}>
@@ -255,7 +256,7 @@ export default function Blog() {
                         {article.coverImageUrl
                           ? <img
                               src={article.coverImageUrl}
-                              alt={article.title}
+                              alt={getBlogCoverAlt(article.slug, article.title, article.coverImageUrl)}
                               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading={i < 3 ? "eager" : "lazy"}
                               decoding="async"

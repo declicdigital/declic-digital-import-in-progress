@@ -1,4 +1,5 @@
 import { useParams, Link, Navigate } from "react-router-dom";
+import { getBlogCover, getBlogCoverAlt, toAbsoluteUrl } from "@/data/blogCoverFallbacks";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, ArrowRight, Tag, ArrowLeft } from "lucide-react";
@@ -42,7 +43,7 @@ const BlogCategory = () => {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .map((p) => ({
         slug: p.slug, title: p.title, excerpt: p.excerpt,
-        coverImageUrl: p.coverImageUrl ?? null, category: p.category,
+        coverImageUrl: getBlogCover(p.slug, p.coverImageUrl), category: p.category,
         tags: p.tags, readTime: p.readTime, date: p.date,
       }));
     setArticles(staticFiltered);
@@ -63,7 +64,7 @@ const BlogCategory = () => {
 
         const remoteArticles: Article[] = data.map((a) => ({
           slug: a.slug, title: a.title, excerpt: a.excerpt,
-          coverImageUrl: a.cover_image_url ?? null, category: a.category,
+          coverImageUrl: getBlogCover(a.slug, a.cover_image_url), category: a.category,
           tags: a.tags ?? [], readTime: a.read_time, date: a.created_at,
         }));
 
@@ -173,7 +174,7 @@ const BlogCategory = () => {
                         {article.coverImageUrl ? (
                           <img
                             src={article.coverImageUrl}
-                            alt={article.title}
+                            alt={getBlogCoverAlt(article.slug, article.title, article.coverImageUrl)}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy"
                           />

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getBlogCover, getBlogCoverAlt, toAbsoluteUrl } from "@/data/blogCoverFallbacks";
 import { ArrowRight, Calendar, Clock, Sparkles } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
 import { createClient } from "@supabase/supabase-js";
@@ -54,7 +55,7 @@ const BlogCarousel = ({ backgroundColor }: BlogCarouselProps) => {
 
       const supabaseArticles = (data ?? []).map((a: any) => ({
         slug: a.slug, title: a.title, excerpt: a.excerpt,
-        coverImageUrl: a.cover_image_url ?? null,
+        coverImageUrl: getBlogCover(a.slug, a.cover_image_url),
         readTime: a.read_time, date: a.created_at,
       }));
 
@@ -117,7 +118,7 @@ const BlogCarousel = ({ backgroundColor }: BlogCarouselProps) => {
                         {article.coverImageUrl ? (
                           <img
                             src={article.coverImageUrl}
-                            alt={article.title}
+                            alt={getBlogCoverAlt(article.slug, article.title, article.coverImageUrl)}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy"
                             decoding="async"
